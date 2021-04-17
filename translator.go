@@ -54,7 +54,7 @@ func main() {
 	flag.StringVar(&args.Input, "input", "../../Src" ,"input source path")
 	flag.StringVar(&args.Output,"output", "../../Src/Client/translations/zh_cn.qm" ,"output qm file path")
 	flag.StringVar(&args.Dict, "dict", "zh_dict.json" ,"translation dict file")
-	flag.StringVar(&args.Qt, "qt", "D:/local/Qt/Qt5.9.4/5.9.4/msvc2015_64/bin/" ,"qt home path")
+	flag.StringVar(&args.Qt, "qt", "c:/local/Qt/Qt5.9.4/5.9.4/msvc2015_64/bin/" ,"qt home path")
 	flag.Parse()
 	log.Println(args)
 
@@ -85,9 +85,12 @@ func main() {
 func loadDict() {
 	text, err := ioutil.ReadFile(args.Dict)
 	if err != nil {
-		log.Fatal("read dict file ", args.Dict, " failed:", err)
+		log.Fatal("read dict file ", args.Dict, " failed: ", err)
 	}
-	json.Unmarshal(text, &dict)
+	err = json.Unmarshal(text, &dict)
+	if err != nil || len(dict) == 0 {
+		log.Fatal("read dict file ", args.Dict, " failed: ", err)
+	}
 }
 
 func runCommand() {
